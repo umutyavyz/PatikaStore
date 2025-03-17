@@ -1,39 +1,56 @@
+// ProductList.js
 import React from "react";
-import { FlatList, View, Text, Image } from "react-native";
+import { FlatList, View, Text, Image, TouchableOpacity } from "react-native";
 import styles from "./ProductList.style";
 
-const ProductList = ({ data }) => {
-    // Eğer eleman sayısı tekse, listeye boş bir öğe ekle
-    const formattedData = [...data];
-    if (data.length % 2 !== 0) {
-        formattedData.push({ id: "empty", empty: true });
-    }
-
-    const renderItem = ({ item }) => {
-        // Boş öğeyse, sadece şeffaf bir görünüm ekle
-        if (item.empty) {
-            return <View style={[styles.card, styles.hiddenCard]} />;
-        }
-
-        return (
-            <View style={styles.card}>
-                <Image source={{ uri: item.imgURL }} style={styles.image} />
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.price}>{item.price}</Text>
-                <Text style={styles.stock}>{item.inStock ? "" : "STOKTA YOK"}</Text>
-            </View>
-        );
-    };
-
+const ProductList = ({ data, onProductPress = () => {} }) => {
+  const renderItem = ({ item, index }) => {
+    // Check if this is the last item and if the total count is odd
+    const isLastItem = index === data.length - 1;
+    const isOddCount = data.length % 2 !== 0;
+    const shouldExpandFullWidth = isLastItem && isOddCount;
+    
     return (
-        <FlatList
-            data={formattedData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            numColumns={2}
-            columnWrapperStyle={styles.row}
-        />
+      <TouchableOpacity 
+        style={[
+          styles.card,
+          shouldExpandFullWidth && styles.fullWidthCard
+        ]}
+        activeOpacity={0.7}
+        onPress={() => onProductPress(item)}
+      >
+        <Image source={{ uri: item.imgURL }} style={styles.image} />
+        <Text numberOfLines={2} style={styles.title}>{item.title}</Text>
+        <Text style={styles.price}>{item.price}</Text>
+        
+        {!item.inStock && (
+          <Text style={styles.stock}>STOKTA YOK</Text>
+        )}
+        
+        {/* Rating işaretleyici eklendi - veri varsa kullanın */}
+        {item.rating && (
+          <View style={styles.ratingContainer}>
+            {/* Burada bir star icon ekleyeceksiniz */}
+            <Text style={styles.rating}>{item.rating}/5</Text>
+          </View>
+        )}
+      </TouchableOpacity>
     );
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={2}
+        key={data.length % 2}
+        columnWrapperStyle={styles.row}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
+  );
 };
 
 export default ProductList;

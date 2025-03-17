@@ -6,10 +6,7 @@ export default StyleSheet.create({
         marginBottom:20,
     },
     input:{
-        marginTop:5,
-        marginLeft:10,
-        marginRight:10,
-        marginBottom:10,
+        margin:20,
         height:40,
         borderColor:'F1EFEF',
         fontSize:15,

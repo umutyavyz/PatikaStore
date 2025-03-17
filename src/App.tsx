@@ -6,25 +6,35 @@ import data from './components/ProductList/Data';
 
 function App(){
   const [text, setText] = useState<string>('');
-  return(
+  
+
+
+
+  return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.storeTitle}>PATIKASTORE</Text>
-      <CustomTextInput placeholder='Ara...' value={text} onChangeText={setText}/>
+      <CustomTextInput 
+        placeholder='Ara...' 
+        value={text} 
+        onChangeText={setText}
+      />
       <View style={styles.container}>
-        <ProductList data={data}></ProductList>
+        <ProductList 
+          data={data} 
+        />
       </View>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container:{
     flex:1,
     backgroundColor:'white',
-    margin:5,
-    marginTop:0,
+    boxSizing:'border-box',
   },
   storeTitle:{
+    textAlign:'center',
     fontSize:28,
     paddingLeft:10,
     backgroundColor:'white',
